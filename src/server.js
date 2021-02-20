@@ -1,34 +1,55 @@
-import express from 'express';
 import { json, urlencoded } from 'body-parser';
-import morgan from 'morgan';
-import config from './config';
 import cors from 'cors';
-import { signup, signin, protect } from './utils/auth';
-import { connect } from './utils/db';
-import userRouter from './resources/user/user.router';
-import itemRouter from './resources/item/item.router';
-import listRouter from './resources/list/list.router';
+import express from 'express';
+import morgan from 'morgan';
 
 export const app = express();
 
 app.disable('x-powered-by');
+
+const router = express.Router();
 
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
-app.post('/signup', signup);
-app.post('/signin', signin);
+// app.post('/signup', signup);
+// app.post('/signin', signin);
+//
+// app.use('/api', protect);
+// app.use('/api/user', userRouter);
+// app.use('/api/item', itemRouter);
+// app.use('/api/list', listRouter);
 
-app.use('/api', protect);
-app.use('/api/user', userRouter);
-app.use('/api/item', itemRouter);
-app.use('/api/list', listRouter);
+router.get('/me', (req, res) => {
+  res.send({ me: 'hello' });
+});
+
+const routes = [
+  'get /cat',
+  'get /cat/:id',
+  'post /cat',
+  'put /cat/:id',
+  'delete /cat/:id'
+];
+
+router
+  .route('/cat')
+  .get()
+  .post();
+
+router
+  .route('/cat/:id')
+  .get()
+  .put()
+  .delete();
+
+app.use('/api', router);
 
 const log = (req, res, next) => {
   console.log('logging');
-  // throw new Error('Wrong route');
+
   req.mydata = 'hello';
 
   next();
