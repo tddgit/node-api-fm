@@ -3,7 +3,9 @@ import controllers from './item.controllers';
 
 const router = Router();
 
-route.router // /api/item
+router.get('/api/item');
+
+router // /api/item
   .route('/')
   .get(controllers.getOne)
   .post(controllers.createOne);
